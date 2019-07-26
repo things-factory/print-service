@@ -1,0 +1,31 @@
+{
+  "name": "@things-factory/print-service",
+  "version": "1.0.0",
+  "main": "dist-server/index.js",
+  "browser": "client/index.js",
+  "things-factory": true,
+  "license": "MIT",
+  "author": "lotstar87",
+  "scripts": {
+    "serve": "things-factory",
+    "serve:dev": "npm run build:server && things-factory-dev",
+    "build": "npm run build:server",
+    "build:server": "npm run clean:server && tsc",
+    "clean:server": "rm -rf dist-server",
+    "clean:client": "rm -rf dist-client",
+    "clean": "npm run clean:server && npm run clean:client",
+    "prepublish": "npm run build:server",
+    "migration": "npm run build:server && things-factory-migration",
+    "migration:create": "node ./node_modules/typeorm/cli.js migration:create",
+    "migration:generate": "node ./node_modules/typeorm/cli.js migration:generate",
+    "migration:run": "node ./node_modules/typeorm/cli.js migration:run",
+    "migration:revert": "node ./node_modules/typeorm/cli.js migration:revert"
+  },
+  "dependencies": {
+    "@things-factory/shell": "*",
+    "bonjour": "^3.5.0",
+    "ip": "^1.1.5",
+    "printer": "^0.2.2"
+  },
+  "devDependencies": {}
+}
