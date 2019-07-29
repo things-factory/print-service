@@ -1,5 +1,6 @@
 var ip = require('ip')
 var bonjour = require('bonjour')()
+const OS = require('os')
 import printer from 'printer'
 
 process.on('bootstrap-module-middleware' as any, app => {
@@ -10,10 +11,11 @@ process.on('bootstrap-module-middleware' as any, app => {
   var printers = printer.getPrinters()
   printers.forEach(p => {
     let txtRecords = {
-      'service-url': `http://${ipAddress}:${servicePort}`
+      'service-url': `http://${ipAddress}:${servicePort}`,
+      name: p.name
     }
     bonjour.publish({
-      name: `${p.name}`,
+      name: `${p.name} - ${OS.hostname()}`,
       type: 'tfprinter',
       port: 1008,
       protocol: 'tcp',
