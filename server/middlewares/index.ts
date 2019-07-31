@@ -23,3 +23,9 @@ process.on('bootstrap-module-middleware' as any, app => {
     })
   })
 })
+
+process.on('exit' as any, code => {
+  bonjour.unpublishAll(() => {
+    bonjour.destroy()
+  })
+})
