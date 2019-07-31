@@ -1,7 +1,10 @@
 var ip = require('ip')
-var bonjour = require('bonjour')()
 const OS = require('os')
 import printer from 'printer'
+
+var mdns = require('mdns')
+
+var ads = []
 
 process.on('bootstrap-module-middleware' as any, app => {
   /* app에 middleware를 추가할 수 있다. */
@@ -14,18 +17,21 @@ process.on('bootstrap-module-middleware' as any, app => {
       'service-url': `http://${ipAddress}:${servicePort}`,
       name: p.name
     }
-    bonjour.publish({
+
+    var printAd = mdns.createAdvertisement(mdns.tcp('tfprinter'), 1008, {
       name: `${p.name} - ${OS.hostname()}`,
-      type: 'tfprinter',
-      port: 1008,
-      protocol: 'tcp',
-      txt: txtRecords
+      txtRecord: txtRecords
     })
+
+    printAd.start()
+    ads.push(printAd)
   })
 })
 
 process.on('exit' as any, code => {
-  bonjour.unpublishAll(() => {
-    bonjour.destroy()
-  })
+  if (ads && ads.length > 0) {
+    ads.forEach(ad => {
+      ad.stop()
+    })
+  }
 })
