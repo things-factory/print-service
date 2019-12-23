@@ -1,6 +1,6 @@
 var ip = require('ip')
 const OS = require('os')
-import printer from 'printer'
+import printer from '@things-factory/node-printer'
 
 var mdns = require('mdns')
 
